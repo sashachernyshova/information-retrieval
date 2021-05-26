@@ -1,5 +1,6 @@
 import re
 from web_crawler.classes.author import Author
+import datetime
 
 
 class Post:
@@ -22,7 +23,10 @@ class Post:
         self.clean_text = clean_text
 
     def get_post_meta(self, post_area, add_area):
-        date = post_area.find("span", {"class": "post__time"}).get_text()
+        date = post_area.find("span", {"class": "post__time"})
+        date = datetime.datetime.strptime(
+            date.get("data-time_published"), "%Y-%m-%dT%H:%MZ"
+        )
         rate = add_area.find("span", {"class": "voting-wjt__counter"}).get_text()
         temp = add_area.find("span")
         total_votes = re.sub("\D", " ", temp.attrs['onclick']).split()[0]
