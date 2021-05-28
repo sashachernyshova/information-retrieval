@@ -4,7 +4,8 @@ import datetime
 
 
 class Post:
-    def __init__(self, soup, post_text, clean_text):
+    def __init__(self, index, soup, post_text, clean_text):
+        self.post_index = index
         post_area = soup.find("div", {"class": "post__wrapper"})
         additional_area = soup.find("div", {"class": "post-additionals"})
         self.title = soup.find('title').get_text(" ", strip=True)
@@ -60,6 +61,7 @@ class Post:
 
     def get_entities(self):
         return [
+            self.post_index,
             self.author.author_name,
             self.author.author_nickname,
             self.author.author_karma,
