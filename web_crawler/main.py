@@ -12,7 +12,7 @@ def main():
         num_of_processes=8,
     )
     total = time.time() - start_time
-    print(total)
+    print("Elapsed time: "+str(total))
 
     crawler.data2csv(res)
 

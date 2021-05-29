@@ -2,7 +2,7 @@ import re
 
 
 def clean(text):
-    """Clean text from punctuations marks, unicode special symbols, links
+    """Clean text from punctuation marks, unicode special symbols, links
 
     Parameters: text (str)
 

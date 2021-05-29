@@ -31,11 +31,11 @@ class Post:
 
             Input: soup
 
-            Returns: tuple
+            Returns: tuple with meta information from post
 
 
         get_entities
-            Returns all object's entities
+            Returns list of all object's entities
     """
 
     def __init__(self, index, soup, post_text, clean_text):

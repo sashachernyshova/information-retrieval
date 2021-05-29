@@ -16,7 +16,7 @@ class Author:
 
             Input: soup
 
-            Returns: tuple(str)
+            Returns: tuple(str) with information about author
     """
 
     def __init__(self, soup):

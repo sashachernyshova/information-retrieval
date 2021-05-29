@@ -8,7 +8,8 @@ import csv
 
 
 class WebCrawler:
-    """
+    """ WebCrawler for Habr parsing. Parsing starts on page with starting_index and goes backwards.
+        For every page we save post's entities in all_posts (list). After finishing parsing we call data2csv function.
 
     FUNCTIONS:
         parse_page
@@ -24,6 +25,19 @@ class WebCrawler:
             Save data to csv file
 
             Input: tuple with entities
+
+            Return: csv file in working directory
+
+         multi_run
+            Multiprocessed parsing.
+
+            Input:
+                number_of_pages (int) - number of wanted pages
+                starting_idx (int) - starting page for parsing
+                time_between (float/int) - time gap
+                num_of_processes (int) - number of processes
+
+            Return: all_posts (list(list)) - list with lists that contain information about posts
     """
 
     def __init__(self):
@@ -95,6 +109,7 @@ class WebCrawler:
                 if len(res) != 0:
                     counter += 1
                     all_posts.append(res)
+                    print("Parsed pages: "+str(counter))
 
                 sleep(time_between)
             page_idx -= num_of_processes
