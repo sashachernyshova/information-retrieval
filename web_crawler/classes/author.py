@@ -16,9 +16,18 @@ class Author:
         except Exception:
             author_name = None
 
-        author_nickname = post_info.find(
-            "a", {"class": "user-info__nickname"}
-        ).get_text(" ", strip=True)
+        try:
+            author_nickname = post_info.find(
+                "a", {"class": "user-info__nickname"}
+            ).get_text(" ", strip=True)
+        except Exception:
+            try:
+                author_nickname = "MEGAPOST"
+                author_name = post_info.find(
+                    "a", {"class": "megapost-head__blog-link"}
+                ).get_text(" ", strip=True)
+            except Exception:
+                author_nickname = None
 
         try:
             author_karma = (

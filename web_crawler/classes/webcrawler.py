@@ -14,7 +14,7 @@ class WebCrawler:
     def parse_page(self, index):
         url = f"https://habr.com/ru/post/{index}/"
         page = requests.get(url)
-        if page.status_code != 404:
+        if page.status_code == 200:
             soup = BeautifulSoup(page.content, 'html.parser')
             post_text = soup.find("div", {"id": "post-content-body"}).get_text(
                 " ", strip=True
@@ -30,7 +30,8 @@ class WebCrawler:
 
     def data2csv(self, data):
         our_columns = (
-            "post_index" "author_name",
+            "post_index",
+            "author_name",
             "author_nickname",
             "author_karma",
             "author_rating",
@@ -68,7 +69,6 @@ class WebCrawler:
         while counter < number_of_pages:
             futures = []
             for thr in range(num_of_processes):
-                print(page_idx)
                 futures.append(executor.submit(self.parse_page, page_idx - thr))
 
             for thr in range(num_of_processes):

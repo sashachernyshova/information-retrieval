@@ -6,8 +6,6 @@ import datetime
 class Post:
     def __init__(self, index, soup, post_text, clean_text):
         self.post_index = index
-        post_area = soup.find("div", {"class": "post__wrapper"})
-        additional_area = soup.find("div", {"class": "post-additionals"})
         self.title = soup.find('title').get_text(" ", strip=True)
         self.author = Author(soup)
         (
@@ -19,24 +17,37 @@ class Post:
             self.post_num_comments,
             self.post_hubs,
             self.post_tags,
-        ) = self.get_post_meta(post_area, additional_area)
+        ) = self.get_post_meta(soup)
         self.post_text = post_text
         self.clean_text = clean_text
 
-    def get_post_meta(self, post_area, add_area):
-        date = post_area.find("span", {"class": "post__time"})
-        date = datetime.datetime.strptime(
-            date.get("data-time_published"), "%Y-%m-%dT%H:%MZ"
-        )
-        rate = add_area.find("span", {"class": "voting-wjt__counter"}).get_text()
-        temp = add_area.find("span")
-        total_votes = re.sub("\D", " ", temp.attrs['onclick']).split()[0]
-        saved = add_area.find(
+    def get_post_meta(self, soup):
+        try:
+            date = soup.find("span", {"class": "post__time"})
+            date = datetime.datetime.strptime(
+                date.get("data-time_published"), "%Y-%m-%dT%H:%MZ"
+            )
+        except Exception:
+            try:
+                temp = soup.find("div"), {"class": "megapost-head__meta "}
+                temp = temp.find_all("li", {"class": "list__item"})
+                print(temp)
+                date = datetime.datetime.strptime(
+                    temp.get("data-time_published"), "%Y-%m-%dT%H:%MZ"
+                )
+            except Exception:
+                date = None
+        rate = soup.find("span", {"class": "voting-wjt__counter"}).get_text()
+
+        temp = soup.find_all("span", {"class": "voting-wjt__counter"})
+        total_votes = re.sub("\D", " ", temp[0].attrs['onclick']).split()[0]
+
+        saved = soup.find(
             "span", {"class": "bookmark__counter js-favs_count"}
         ).get_text()
-        seen = add_area.find("span", {"class": "post-stats__views-count"}).get_text()
+        seen = soup.find("span", {"class": "post-stats__views-count"}).get_text()
         try:
-            num_comments = add_area.find(
+            num_comments = soup.find(
                 "span", {"class": "post-stats__comments-count"}
             ).get_text()
         except Exception:
@@ -44,14 +55,19 @@ class Post:
 
         hubs = []
         tags = []
+        try:
+            temp = soup.find(
+                "ul", {"class": "inline-list inline-list_fav-tags js-post-hubs"}
+            ).findChildren("a")
+        except Exception:
+            temp = soup.find(
+                "ul", {"class": "megapost-head__hubs list list_inline"}
+            ).findChildren("a")
+        finally:
+            for hub in temp:
+                hubs.append(hub.text.strip())
 
-        temp = post_area.find(
-            "ul", {"class": "inline-list inline-list_fav-tags js-post-hubs"}
-        ).findChildren("a")
-        for hub in temp:
-            hubs.append(hub.text.strip())
-
-        temp = post_area.find(
+        temp = soup.find(
             "ul", {"class": "inline-list inline-list_fav-tags js-post-tags"}
         ).findChildren("a")
         for tag in temp:
