@@ -2,6 +2,13 @@ import re
 
 
 def clean(text):
+    """Clean text from punctuations marks, unicode special symbols, links
+
+    Parameters: text (str)
+
+    Return: clean_text (str)
+    """
+
     text_ = text.replace("\n", " ").replace("\r", " ")
     text_no_pmarks = re.sub(r'[^\w\s]', '', text_)
     text_no_unicode = re.sub(r'[\u1000-\u3000\x00-\x1f\x7f-\x9f]', '', text_no_pmarks)

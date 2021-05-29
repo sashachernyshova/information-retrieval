@@ -8,6 +8,24 @@ import csv
 
 
 class WebCrawler:
+    """
+
+    FUNCTIONS:
+        parse_page
+            Get page by index and if we get 200 status code we check length of post.
+            If it is more than 2000 we clean text and check the length again.
+            After it
+
+            Input: index
+
+            Return: tuple with post's entities
+
+        data2csv
+            Save data to csv file
+
+            Input: tuple with entities
+    """
+
     def __init__(self):
         pass
 
@@ -57,10 +75,10 @@ class WebCrawler:
 
     def multi_run(
         self,
-        number_of_pages=10,
-        starting_idx=500000,
-        time_between=0.5,
-        num_of_processes=3,
+        number_of_pages,
+        starting_idx,
+        time_between,
+        num_of_processes,
     ):
         all_posts = []
         page_idx = starting_idx

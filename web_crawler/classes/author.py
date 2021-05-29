@@ -1,29 +1,49 @@
 class Author:
-    def __init__(self, post_info):
+    """Class contains info about author
+
+    FUNCTIONS:
+        init: Following entities are got from get_author_info function
+            author_name (str)
+            author_nickname (str)
+            author_karma (str)
+            author_rating (str)
+            author_specialization (str)
+
+
+        get_author_info:
+            Habr has two types of posts: post and megapost. Megapost has different type of html tags,
+            that is why there are several try blocks in some places.
+
+            Input: soup
+
+            Returns: tuple(str)
+    """
+
+    def __init__(self, soup):
         (
             self.author_name,
             self.author_nickname,
             self.author_karma,
             self.author_rating,
             self.author_specialization,
-        ) = self.get_author_info(post_info)
+        ) = self.get_author_info(soup)
 
-    def get_author_info(self, post_info):
+    def get_author_info(self, soup):
         try:
-            author_name = post_info.find(
+            author_name = soup.find(
                 "a", {"class": "user-info__fullname"}
             ).get_text(" ", strip=True)
         except Exception:
             author_name = None
 
         try:
-            author_nickname = post_info.find(
+            author_nickname = soup.find(
                 "a", {"class": "user-info__nickname"}
             ).get_text(" ", strip=True)
         except Exception:
             try:
                 author_nickname = "MEGAPOST"
-                author_name = post_info.find(
+                author_name = soup.find(
                     "a", {"class": "megapost-head__blog-link"}
                 ).get_text(" ", strip=True)
             except Exception:
@@ -31,7 +51,7 @@ class Author:
 
         try:
             author_karma = (
-                post_info.find("a", {"class": "user-info__stats-item stacked-counter"})
+                soup.find("a", {"class": "user-info__stats-item stacked-counter"})
                 .get_text(" ", strip=True)
                 .split()[0]
             )
@@ -40,7 +60,7 @@ class Author:
 
         try:
             author_rating = (
-                post_info.find(
+                soup.find(
                     "a",
                     {
                         "class": "user-info__stats-item stacked-counter stacked-counter_rating"
@@ -53,7 +73,7 @@ class Author:
             author_rating = None
 
         try:
-            author_specialization = post_info.find(
+            author_specialization = soup.find(
                 "div", {"class": "user-info__specialization"}
             ).get_text(" ", strip=True)
         except Exception:
