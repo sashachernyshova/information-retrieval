@@ -29,7 +29,7 @@ class Post:
             )
         except Exception:
             try:
-                temp = soup.find("div"), {"class": "megapost-head__meta "}
+                temp = soup.find("div", {"class": "megapost-head__meta"})
                 temp = temp.find_all("li", {"class": "list__item"})
                 print(temp)
                 date = datetime.datetime.strptime(

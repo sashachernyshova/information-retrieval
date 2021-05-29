@@ -48,11 +48,12 @@ class WebCrawler:
             "raw_post_text",
             "clean_text",
         )
-
-        with open("posts.csv", "w") as f:
+        data = [our_columns] + data
+        with open('parsing_results.csv', 'w') as f:
             writer = csv.writer(f)
-            #             writer.writerow(our_columns)
-            writer.writerow((data))
+            writer.writerows(data)
+
+        print("Writing complete")
 
     def multi_run(
         self,
