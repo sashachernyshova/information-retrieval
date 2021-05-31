@@ -70,15 +70,29 @@ class Post:
                 )
             except Exception:
                 date = None
-        rate = soup.find("span", {"class": "voting-wjt__counter"}).get_text()
+        try:
+            rate = soup.find("span", {"class": "voting-wjt__counter"}).get_text()
+        except Exception:
+            rate = None
 
-        temp = soup.find_all("span", {"class": "voting-wjt__counter"})
-        total_votes = re.sub("\D", " ", temp[0].attrs['onclick']).split()[0]
+        try:
+            temp = soup.find_all("span", {"class": "voting-wjt__counter"})
+            total_votes = re.sub("\D", " ", temp[0].attrs['onclick']).split()[0]
+        except Exception:
+            total_votes = None
 
-        saved = soup.find(
-            "span", {"class": "bookmark__counter js-favs_count"}
-        ).get_text()
-        seen = soup.find("span", {"class": "post-stats__views-count"}).get_text()
+        try:
+            saved = soup.find(
+                "span", {"class": "bookmark__counter js-favs_count"}
+            ).get_text()
+        except Exception:
+            saved = None
+
+        try:
+            seen = soup.find("span", {"class": "post-stats__views-count"}).get_text()
+        except Exception:
+            seen = None
+
         try:
             num_comments = soup.find(
                 "span", {"class": "post-stats__comments-count"}
@@ -93,18 +107,26 @@ class Post:
                 "ul", {"class": "inline-list inline-list_fav-tags js-post-hubs"}
             ).findChildren("a")
         except Exception:
-            temp = soup.find(
-                "ul", {"class": "megapost-head__hubs list list_inline"}
-            ).findChildren("a")
+            try:
+                temp = soup.find(
+                    "ul", {"class": "megapost-head__hubs list list_inline"}
+                ).findChildren("a")
+            except Exception:
+                temp = []
         finally:
             for hub in temp:
                 hubs.append(hub.text.strip())
+        if len(hubs) == 0:
+            hubs = None
 
-        temp = soup.find(
-            "ul", {"class": "inline-list inline-list_fav-tags js-post-tags"}
-        ).findChildren("a")
-        for tag in temp:
-            tags.append(tag.text.strip())
+        try:
+            temp = soup.find(
+                "ul", {"class": "inline-list inline-list_fav-tags js-post-tags"}
+            ).findChildren("a")
+            for tag in temp:
+                tags.append(tag.text.strip())
+        except Exception:
+            tags = None
 
         return date, rate, total_votes, saved, seen, num_comments, hubs, tags
 

@@ -15,7 +15,6 @@ class WebCrawler:
         parse_page
             Get page by index and if we get 200 status code we check length of post.
             If it is more than 2000 we clean text and check the length again.
-            After it
 
             Input: index
 
