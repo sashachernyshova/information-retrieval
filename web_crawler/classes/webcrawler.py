@@ -44,7 +44,7 @@ class WebCrawler:
 
     def parse_page(self, index):
         url = f"https://habr.com/ru/post/{index}/"
-        page = requests.get(url)
+        page = requests.get(url, timeout=5)
         if page.status_code == 200:
             soup = BeautifulSoup(page.content, 'html.parser')
             post_text = soup.find("div", {"id": "post-content-body"}).get_text(
